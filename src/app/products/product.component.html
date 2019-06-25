@@ -1,0 +1,62 @@
+<h3 [ngStyle]="{color:getColor()}" ngClass="online">
+    Server is {{serverStatus}}</h3>
+<div class="panel panel-primary">
+    <div class="panel-heading">{{title}}</div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-2">
+                Product search
+            </div>
+                
+            <div class="col-md-3">
+                    <input type="text" 
+                    [(ngModel)]="userInput" placeholder="enter your search">
+            </div>
+            
+        </div>
+
+        <div class="row">
+                <div class="col-md-4">
+                   <h4>
+                        Number of results is: 
+                        {{(products | searchFilter:userInput).length}}
+                   </h4>
+                </div>
+            </div>
+                    
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>
+                                <button class="btn btn-primary" (click)="toggleImage()">
+                                    {{showImage ? 'Hide Image' : 'Show Image' }}</button>
+                            </th>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Stock</th>
+                            <th>Rating</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let prod of products | searchFilter:userInput">
+                            <td><img [src]="prod.product_url" *ngIf=showImage [style.width.px]="imageSize"/></td>
+                            <td>{{prod.name | myCase: 'upper'}}</td>
+                            <td>{{prod.category | myCase: 'lower'}}</td>
+                            <td [ngStyle]="{'background-color':prod.price<40 ? 'pink':'skyblue'}">
+                                {{prod.price | discount: 5 | currency:'INR'}}
+                            </td>                           
+                            <td>{{prod.stock}}</td>
+                            <td>
+                                <app-star [rating]="prod.starRating"
+                                (ratingClicked)='onDataReceived($event)'></app-star>
+                                </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+            
+    </div>
+</div>
